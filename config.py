@@ -102,16 +102,16 @@ for i, (name, kwargs) in enumerate(group_names, 1):
 
 layouts = [
     layout.MonadTall(
-        border_focus=colors['fg1'],
-        border_normal=colors['bg0'],
+        border_focus=colors['bg0'],
+        border_normal=colors['fg0'],
         border_width=2,
         margin=5,
         ratio=0.55,
     ),
     # layout.Max(),
     layout.Floating(
-        border_focus='#ebdbb2',
-        border_normal='#282828',
+        border_focus=colors['bg0'],
+        border_normal=colors['fg0'],
         border_width=2,
     ),
     # Try more layouts by unleashing below layouts.
@@ -141,17 +141,17 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    background=colors['bg2'],
+                    background=colors['fg3'],
                     highlight_method='text',
-                    this_current_screen_border=colors['orange2'],
+                    this_current_screen_border=colors['red1'],
                     hide_unused=True,
                     disable_drag=True,
                     use_mouse_wheel=False,
                 ),
-                pline(0, colors['bg2'], colors['bg0_h']),
-                widget.WindowName(background=colors['bg0_h']),
-                widget.Systray(background=colors['bg0_h']),
-                pline(1, colors['purple1'], colors['bg0_h']),
+                pline(0, colors['fg3'], colors['fg1']),
+                widget.WindowName(background=colors['fg1'], foreground=colors['bg1']),
+                widget.Systray(background=colors['fg1']),
+                pline(1, colors['purple1'], colors['fg1']),
                 widget.TextBox("⌨", background=colors['purple1']),
                 widget.KeyboardLayout(
                     background=colors['purple1'],
@@ -198,8 +198,8 @@ follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(
-    border_focus=colors['fg1'],
-    border_normal=colors['bg0'],
+    border_focus=colors['bg0'],
+    border_normal=colors['fg0'],
     border_width=2,
     margin=5,
     float_rules=[
