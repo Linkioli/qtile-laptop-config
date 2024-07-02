@@ -151,7 +151,10 @@ screens = [
                 pline(0, colors['fg3'], colors['fg1']),
                 widget.WindowName(background=colors['fg1'], foreground=colors['bg1']),
                 widget.Systray(background=colors['fg1']),
-                pline(1, colors['purple1'], colors['fg1']),
+                pline(1, colors['aqua1'], colors['fg1']),
+                widget.BatteryIcon(background=colors['aqua1']),
+                widget.Battery(background=colors['aqua1']),
+                pline(1, colors['purple1'], colors['aqua1']),
                 widget.TextBox("⌨", background=colors['purple1']),
                 widget.KeyboardLayout(
                     background=colors['purple1'],
