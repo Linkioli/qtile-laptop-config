@@ -6,6 +6,7 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+import requests
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -48,7 +49,7 @@ colors = {
     'purple2': '#d3869b',
     'aqua1': '#689d6a',
     'aqua2': '#8ec07c',
-    'orange1': '#d65s0e',
+    'orange1': '#d65d0e',
     'orange2': '#fe8019',
     'gray1': '#a89984',
     'gray2': '#928374',
@@ -67,8 +68,15 @@ colors = {
     'fg4': '#a89984',
 }
 
-# Function for Powerline affect taken from: https://github.com/hiimsergey/qtile-gruvbox-material/blob/main/config.py
 
+def get_metar(station: str):
+    station = station.upper()
+    url = f"https://tgftp.nws.noaa.gov/data/observations/metar/stations/{station}.TXT"
+    response = requests.get(url)
+    text_data = response.text.split("\n")[1]
+    return text_data
+
+# Function for Powerline affect taken from: https://github.com/hiimsergey/qtile-gruvbox-material/blob/main/config.py
 
 def pline(rl, fg, bg):
     if rl == 0:
@@ -102,16 +110,16 @@ for i, (name, kwargs) in enumerate(group_names, 1):
 
 layouts = [
     layout.MonadTall(
-        border_focus=colors['bg0'],
-        border_normal=colors['fg0'],
+        border_focus=colors['fg1'],
+        border_normal=colors['bg0'],
         border_width=2,
         margin=5,
         ratio=0.55,
     ),
     # layout.Max(),
     layout.Floating(
-        border_focus=colors['bg0'],
-        border_normal=colors['fg0'],
+        border_focus='#ebdbb2',
+        border_normal='#282828',
         border_width=2,
     ),
     # Try more layouts by unleashing below layouts.
@@ -141,41 +149,36 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    background=colors['fg3'],
+                    background=colors['bg2'],
                     highlight_method='text',
-                    this_current_screen_border=colors['red1'],
+                    this_current_screen_border=colors['orange2'],
                     hide_unused=True,
                     disable_drag=True,
                     use_mouse_wheel=False,
                 ),
-                pline(0, colors['fg3'], colors['fg1']),
-                widget.WindowName(background=colors['fg1'], foreground=colors['bg1']),
-                widget.Systray(background=colors['fg1']),
-                pline(1, colors['aqua1'], colors['fg1']),
-                widget.BatteryIcon(background=colors['aqua1']),
-                widget.Battery(background=colors['aqua1']),
-                pline(1, colors['purple1'], colors['aqua1']),
-                widget.TextBox("⌨", background=colors['purple1']),
+                pline(0, colors['bg2'], colors['bg0_h']),
+                widget.WindowName(background=colors['bg0_h']),
+                pline(1, colors['purple1'], colors['bg0_h']),
+                widget.Systray(background=colors['purple1']),
+                pline(1, colors['blue1'], colors['purple1']),
+                widget.TextBox("⌨", background=colors['blue1']),
                 widget.KeyboardLayout(
-                    background=colors['purple1'],
+                    background=colors['blue1'],
                     configured_keyboards=['us colemak', 'us'],
                 ),
-                pline(1, colors['yellow1'], colors['purple1']),
-                widget.TextBox("🔉", background=colors['yellow1']),
-                widget.PulseVolume(background=colors['yellow1']),
-                pline(1, colors['blue1'], colors['yellow1']),
-                widget.TextBox("🔅", background=colors['blue1']),
-                widget.OpenWeather(
-                    background=colors['blue1'],
-                    zip='23185',
-                    metric=False,
-                    format='{location_city}: {temp} °{units_temperature} {icon} {weather_details}'
-                ),
-                pline(1, colors['orange2'], colors['blue1']),
-                widget.TextBox("⏰", background=colors['orange2']),
+                pline(1, colors['aqua1'], colors['blue1']),
+                widget.TextBox("🔉", background=colors['aqua1']),
+                widget.PulseVolume(background=colors['aqua1']),
+                pline(1, colors['green1'], colors['aqua1']),
+                widget.GenPollText(func = lambda: get_metar('korf'), background=colors['green1']),
+                pline(1, colors['yellow1'], colors['green1']),
+                widget.BatteryIcon(background=colors['yellow1']),
+                widget.Battery(background=colors['yellow1']),
+                pline(1, colors['orange1'], colors['yellow1']),
+                widget.TextBox("⏰", background=colors['orange1']),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p",
-                             background=colors['orange2']),
-                pline(1, colors['red1'], colors['orange2']),
+                             background=colors['orange1']),
+                pline(1, colors['red1'], colors['orange1']),
                 widget.CurrentLayoutIcon(background=colors['red1']),
             ],
 
@@ -201,8 +204,8 @@ follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(
-    border_focus=colors['bg0'],
-    border_normal=colors['fg0'],
+    border_focus=colors['fg1'],
+    border_normal=colors['bg0'],
     border_width=2,
     margin=5,
     float_rules=[
